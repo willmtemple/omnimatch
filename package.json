@@ -1,0 +1,39 @@
+{
+  "name": "omnimatch",
+  "version": "1.0.0-development.1",
+  "description": "TypeScript tagged-union utility knife",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist* *.log",
+    "format": "prettier --write src/**/*.ts",
+    "prebuild": "npm run clean",
+    "test": "echo No tests :("
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willmtemple/omnimatch.git"
+  },
+  "keywords": [
+    "typescript",
+    "discriminated",
+    "tagged",
+    "union",
+    "match",
+    "pattern"
+  ],
+  "files": [
+    "dist/*"
+  ],
+  "author": "Will Temple <will@wtemple.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/willmtemple/omnimatch/issues"
+  },
+  "homepage": "https://github.com/willmtemple/omnimatch#readme",
+  "devDependencies": {
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.2"
+  }
+}
