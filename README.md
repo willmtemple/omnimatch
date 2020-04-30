@@ -86,11 +86,10 @@ Import the `match` function (it is exported as `default` and as `match`):
 import { match } from "omnimatch";
 ```
 
-Omnimatch is packaged as an ECMAScript module. If you want to use omnimatch with
-CommonJS, use the following import instead:
+Or, using CommonJS:
 
 ```javascript
-const { default: match } = require("omnimatch");
+const { match } = require("omnimatch");
 ```
 
 ## Use
