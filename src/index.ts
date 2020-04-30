@@ -67,5 +67,34 @@ export function match<
   return delegate ? delegate(input) : undefined;
 }
 
-export default match;
+export function factory<
+  Union extends { [K in Discriminant]: string | number },
+  Discriminant extends string | number = "kind"
+>(
+  discriminant?: Discriminant
+): {
+  [K in Union[Discriminant]]: (
+    fields: {
+      [Field in Exclude<
+        keyof Extract<Union, { kind: K }>,
+        Discriminant
+      >]: Extract<Union, { kind: K }>[Field];
+    }
+  ) => Extract<Union, { kind: K }>;
+} {
+  const d = discriminant ?? "kind";
+  const maker: any = new Proxy(
+    {},
+    {
+      get(_: never, key: number | string | symbol) {
+        return (fields: any) => ({
+          [d]: key,
+          ...fields,
+        });
+      },
+    }
+  );
+
+  return maker;
+}
 

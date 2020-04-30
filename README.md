@@ -18,6 +18,41 @@ tested. It may cause:
 - bizarre type errors
 - long compilation times
 
+You __should not__ use this package without a type-checker. It relies heavily
+on type-checking from TypeScript to ensure that usage of the library is
+correct.  There is __absolutely no__ runtime validation in this library.
+
+## About
+
+Omnimatch works with any discriminant and any set of discriminant values, even
+unbounded ones. The only restriction is that the discriminant values be valid
+index types (in other words: `string | number`).
+
+Omnimatch leverages the object-literal syntax of JavaScript to provide an
+experience similar to `match` or `case` expressions in functional programming
+languages.
+
+It provides very strong type-checking. It can infer:
+
+- the types of the parameters within the match arm
+- the return type of the `match` function (the union of all possible return
+  types of the match arms)
+
+It allows for destructuring tagged unions in a huge variety of scenarios. For
+example, the following sections contain some more advanced usage.
+
+## Install
+
+Install the package using `npm`:
+
+`npm install omnimatch@1.0.0-development.1`
+
+Import the required functions:
+
+```typescript
+import { factory, match } from "omnimatch";
+```
+
 ## Why
 
 Rust, ML, and other languages have fancy `match`/`case` expressions. In
@@ -58,12 +93,18 @@ const x: number = matchAB(ab, {
 });
 ```
 
+## Use
+
+### Match
+
 This redundancy can get onerous, especially if you have a lot of tagged unions.
 Omnimatch provides a single `match` function that will work for any
 discriminated union, using any discriminant property, and any set of
 discriminant values. It provides strong type-checking and inference.
 
 ```typescript
+import { match } from "omnimatch";
+
 declare const ab : AB;
 
 // Type of x and of the pattern are inferred
@@ -74,42 +115,22 @@ const x = match(ab, {
 
 ```
 
-## Install
+### Factory
 
-Install the package using `npm`:
-
-`npm install omnimatch@1.0.0-development.1`
-
-Import the `match` function (it is exported as `default` and as `match`):
+Similarly, it can become tiring to type `... kind: "A" ...` many times when
+fabricating new variants, so Omnimatch also provides a `factory` function that
+can assist in the creation of variants:
 
 ```typescript
-import { match } from "omnimatch";
+import { factory } from "omnimatch";
+
+const make = factory<AB>();
+
+const a : A = make.A({ foo: 10 });
 ```
 
-Or, using CommonJS:
-
-```javascript
-const { match } = require("omnimatch");
-```
-
-## Use
-
-Omnimatch works with any discriminant and any set of discriminant values, even
-unbounded ones. The only restriction is that the discriminant values be valid
-index types (in other words: `string | number`).
-
-Omnimatch leverages the object-literal syntax of JavaScript to provide an
-experience similar to `match` or `case` expressions in functional programming
-languages. 
-
-It provides very strong type-checking. It can infer:
-
-- the types of the parameters within the match arm
-- the return type of the `match` function (the union of all possible return
-  types of the match arms)
-
-It allows for destructuring tagged unions in a huge variety of scenarios. For
-example, the following sections contain some more advanced usage.
+The properties of the `make` object returned from `factory` are strongly-typed
+and will automatically add the `kind` property.
 
 ### Unions with Multiple Variants Having the Same Discriminant
 
