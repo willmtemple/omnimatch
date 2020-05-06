@@ -83,18 +83,23 @@ export function factory<
   ) => Extract<Union, { kind: K }>;
 } {
   const d = discriminant ?? "kind";
-  const maker: any = new Proxy(
+  let lazyContainer: any;
+  const proto: any = new Proxy(
     {},
     {
-      get(_: never, key: number | string | symbol) {
-        return (fields: any) => ({
+      get(_: never, key: number | string) {
+        lazyContainer[key] = (fields: any) => ({
           [d]: key,
           ...fields,
         });
+
+        return lazyContainer[key];
       },
     }
   );
 
-  return maker;
+  lazyContainer = Object.create(proto);
+
+  return lazyContainer;
 }
 
